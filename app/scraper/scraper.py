@@ -78,11 +78,11 @@ class Scraper:
             cached_price = self.cache.get(title+"899")
             if cached_price is None or cached_price != price:
                 self.cache.set(title, price)
-                # try:
-                image_path = await self._download_image(session, image_url, title)
-                # except Exception as e:
-                #     print(f"error in downloading image: {e}")
-                #     image_path = "N/A"
+                try:
+                    image_path = await self._download_image(session, image_url, title)
+                except Exception as e:
+                    print(f"error in downloading image: {e}")
+                    image_path = "N/A"
                 products.append({
                     "product_title": title,
                     "product_price": price,
@@ -95,7 +95,7 @@ class Scraper:
         filename = f"{title.replace(' ', '_')}.jpg"
         filepath = os.path.join(self.image_dir, filename)
         dir_path = os.path.dirname(filepath)
-        os.makedirs(dir_path, exist_ok=True)  # Create the directory if it doesn't exist
+        os.makedirs(dir_path, exist_ok=True)
 
         async with session.get(url) as response:
             if response.status == 200:
